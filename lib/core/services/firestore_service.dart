@@ -52,7 +52,12 @@ class FirestoreService {
 
       if (postDocuments.docs.isNotEmpty) {
         return postDocuments.docs
-            .map((snapshot) => Post.fromData(snapshot.data() as Map<String, dynamic>))
+            .map(
+              (snapshot) => Post.fromData(
+                snapshot.data() as Map<String, dynamic>,
+                snapshot.id,
+              ),
+            )
             .where((post) => post.title.isNotEmpty)
             .toList();
       }
@@ -68,7 +73,12 @@ class FirestoreService {
     _postsCollectionReference.snapshots().listen((postsSnapshot) {
       if (postsSnapshot.docs.isNotEmpty) {
         var posts = postsSnapshot.docs
-            .map((snapshot) => Post.fromData(snapshot.data() as Map<String, dynamic>))
+            .map(
+              (snapshot) => Post.fromData(
+                snapshot.data() as Map<String, dynamic>,
+                snapshot.id,
+              ),
+            )
             .where((mappedItem) => mappedItem.title.isNotEmpty)
             .toList();
 
@@ -81,5 +91,15 @@ class FirestoreService {
 
     // Return the stream underlying our _postsController.
     return _postsController.stream;
+  }
+
+  Future deletePost(String documentId) async {
+    try {
+      return _postsCollectionReference.doc(documentId).delete();
+    } on FirebaseException catch (e) {
+      return e.message;
+    } catch (e) {
+      return e.toString();
+    }
   }
 }

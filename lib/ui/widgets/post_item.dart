@@ -3,7 +3,9 @@ import 'package:fluttercompoundapp/core/models/post.dart';
 
 class PostItem extends StatelessWidget {
   final Post post;
-  const PostItem({Key? key, required this.post}) : super(key: key);
+  final Function onDeleteItem;
+
+  const PostItem({Key? key, required this.post, required this.onDeleteItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class PostItem extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () {},
+            onPressed: () {
+              onDeleteItem();
+            },
           ),
         ],
       ),
