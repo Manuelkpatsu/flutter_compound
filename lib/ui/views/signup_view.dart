@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttercompoundapp/core/view_models/signup_view_model.dart';
 import 'package:fluttercompoundapp/ui/shared/ui_helpers.dart';
 import 'package:fluttercompoundapp/ui/widgets/busy_button.dart';
+import 'package:fluttercompoundapp/ui/widgets/expansion_list.dart';
 import 'package:fluttercompoundapp/ui/widgets/input_field.dart';
 import 'package:fluttercompoundapp/ui/widgets/text_link.dart';
 import 'package:stacked/stacked.dart';
@@ -12,6 +13,7 @@ class SignUpView extends StatelessWidget {
   static const routeName = 'SignUpView';
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,10 @@ class SignUpView extends StatelessWidget {
                       ),
                     ),
                     verticalSpaceLarge,
-                    // TODO: Add additional user data here to save (episode 2)
+                    InputField(
+                      placeholder: 'Full Name',
+                      controller: fullNameController,
+                    ),
                     InputField(
                       placeholder: 'Email',
                       controller: emailController,
@@ -45,6 +50,12 @@ class SignUpView extends StatelessWidget {
                       password: true,
                       controller: passwordController,
                       additionalNote: 'Password has to be a minimum of 6 characters.',
+                    ),
+                    verticalSpaceSmall,
+                    ExpansionList<String>(
+                      items: const ['Admin', 'User'],
+                      title: model.selectedRole,
+                      onItemSelected: model.setSelectedRole,
                     ),
                     verticalSpaceMedium,
                     Row(
@@ -58,6 +69,7 @@ class SignUpView extends StatelessWidget {
                             model.signUp(
                               email: emailController.text,
                               password: passwordController.text,
+                              fullName: fullNameController.text,
                             );
                           },
                         )

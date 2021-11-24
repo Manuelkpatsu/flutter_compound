@@ -10,13 +10,21 @@ class SignUpViewModel extends BaseModel {
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  String _selectedRole = 'Select a User Role';
+  String get selectedRole => _selectedRole;
 
-  Future signUp({required String email, required String password}) async {
+  Future signUp({
+    required String email,
+    required String password,
+    required String fullName,
+  }) async {
     setBusy(true);
 
     var result = await _authenticationService.signUpWithEmail(
       email: email,
       password: password,
+      fullName: fullName,
+      role: _selectedRole,
     );
 
     setBusy(false);
@@ -39,5 +47,10 @@ class SignUpViewModel extends BaseModel {
 
   void navigateToLogin() {
     _navigationService.navigateTo(loginViewRoute);
+  }
+
+  void setSelectedRole(String role) {
+    _selectedRole = role;
+    notifyListeners();
   }
 }
