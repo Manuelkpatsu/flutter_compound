@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttercompoundapp/constants/route_names.dart';
+import 'package:fluttercompoundapp/ui/views/create_post_view.dart';
 import 'package:fluttercompoundapp/ui/views/home_view.dart';
 import 'package:fluttercompoundapp/ui/views/login_view.dart';
 import 'package:fluttercompoundapp/ui/views/signup_view.dart';
@@ -26,6 +27,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: const HomeView(),
+      );
+    case createPostViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: CreatePostView(),
       );
     default:
       return MaterialPageRoute(
