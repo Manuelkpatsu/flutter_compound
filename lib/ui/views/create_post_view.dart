@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:fluttercompoundapp/core/models/post.dart';
 import 'package:fluttercompoundapp/core/view_models/create_post_view_model.dart';
 import 'package:fluttercompoundapp/ui/shared/ui_helpers.dart';
 import 'package:fluttercompoundapp/ui/widgets/input_field.dart';
 import 'package:stacked/stacked.dart';
 
 class CreatePostView extends StatelessWidget {
+  final Post? editingPost;
   final TextEditingController titleController = TextEditingController();
 
-  CreatePostView({Key? key}) : super(key: key);
+  CreatePostView({Key? key, this.editingPost}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CreatePostViewModel>.reactive(
       viewModelBuilder: () => CreatePostViewModel(),
+      onModelReady: (model) {
+        // update the text in the controller
+        titleController.text = editingPost!.title;
+
+        // set the editting post
+        model.setEditingPost(editingPost!);
+      },
       builder: (context, model, child) => Scaffold(
         floatingActionButton: FloatingActionButton(
           child: !model.busy

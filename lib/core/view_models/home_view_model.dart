@@ -58,18 +58,30 @@ class HomeViewModel extends BaseModel {
       cancelTitle: 'No',
     );
 
-    if (dialogResponse.confirmed == true) {
+    if (dialogResponse.confirmed!) {
       setBusy(true);
-      await _firestoreService.deletePost(_posts[index].documentId!);
+      var result = await _firestoreService.deletePost(_posts[index].documentId!);
       setBusy(false);
 
-      if (dialogResponse.confirmed!) {
-        setBusy(true);
-        await _firestoreService.deletePost(_posts[index].documentId!);
-        setBusy(false);
+      if (result is String) {
+        await _dialogService.showDialog(
+          title: 'Could not delete post.',
+          description: result,
+        );
+      } else {
+        await _dialogService.showDialog(
+          title: 'Post successfully deleted',
+          description: 'Your post has been deleted.',
+        );
       }
     }
   }
 
-  void navigateToCreateView() => _navigationService.navigateTo(createPostViewRoute);
+  Future navigateToCreateView() async {
+    await _navigationService.navigateTo(createPostViewRoute);
+  }
+
+  void editPost(int index) {
+    _navigationService.navigateTo(createPostViewRoute, arguments: _posts[index]);
+  }
 }

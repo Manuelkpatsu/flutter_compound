@@ -95,7 +95,19 @@ class FirestoreService {
 
   Future deletePost(String documentId) async {
     try {
-      return _postsCollectionReference.doc(documentId).delete();
+      await _postsCollectionReference.doc(documentId).delete();
+      return true;
+    } on FirebaseException catch (e) {
+      return e.message;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future updatePost(Post post) async {
+    try {
+      await _postsCollectionReference.doc(post.documentId).update(post.toJson());
+      return true;
     } on FirebaseException catch (e) {
       return e.message;
     } catch (e) {
